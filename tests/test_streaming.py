@@ -163,7 +163,8 @@ class TweepyStreamReadBufferTests(unittest.TestCase):
         mock_read = MagicMock(side_effect=on_read)
 
         try:
-            with patch.multiple(stream, create=True, read=mock_read, closed=True):
+            stream.close()
+            with patch.multiple(stream, create=True, read=mock_read):
                 # Now the stream can't call 'read' more than call_limit times
                 # and it looks like a requests stream that is closed
                 buf = ReadBuffer(stream, 50)
