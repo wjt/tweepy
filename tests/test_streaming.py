@@ -122,11 +122,11 @@ class TweepyStreamTests(unittest.TestCase):
 
 class TweepyStreamReadBufferTests(unittest.TestCase):
 
-    stream = """11\n{id:12345}\n\n24\n{id:23456, test:"blah"}\n"""
+    stream = six.b("""11\n{id:12345}\n\n24\n{id:23456, test:"blah"}\n""")
 
     def test_read_tweet(self):
         for length in [1, 2, 5, 10, 20, 50]:
-            buf = ReadBuffer(six.StringIO(self.stream), length)
+            buf = ReadBuffer(six.BytesIO(self.stream), length)
             self.assertEqual('11\n', buf.read_line())
             self.assertEqual('{id:12345}\n', buf.read_len(11))
             self.assertEqual('\n', buf.read_line())
@@ -157,7 +157,7 @@ class TweepyStreamReadBufferTests(unittest.TestCase):
             return ""
 
         # Create a fake stream
-        stream = six.StringIO('')
+        stream = six.BytesIO(six.b(''))
 
         # Mock it's read function so it can't be called too many times
         mock_read = MagicMock(side_effect=on_read)
@@ -176,9 +176,9 @@ class TweepyStreamReadBufferTests(unittest.TestCase):
         self.assertEqual(mock_read.call_count, 0)
 
     def test_read_unicode_tweet(self):
-        stream = '11\n{id:12345}\n\n23\n{id:23456, test:"\xe3\x81\x93"}\n\n'
+        stream = six.b('11\n{id:12345}\n\n23\n{id:23456, test:"\xe3\x81\x93"}\n\n')
         for length in [1, 2, 5, 10, 20, 50]:
-            buf = ReadBuffer(six.StringIO(stream), length)
+            buf = ReadBuffer(six.BytesIO(stream), length)
             self.assertEqual('11\n', buf.read_line())
             self.assertEqual('{id:12345}\n', buf.read_len(11))
             self.assertEqual('\n', buf.read_line())
