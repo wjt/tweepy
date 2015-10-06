@@ -183,7 +183,7 @@ class TweepyStreamReadBufferTests(unittest.TestCase):
             self.assertEqual('{id:12345}\n', buf.read_len(11))
             self.assertEqual('\n', buf.read_line())
             self.assertEqual('23\n', buf.read_line())
-            self.assertEqual('{id:23456, test:"\xe3\x81\x93"}\n', buf.read_len(23))
+            self.assertEqual(u'{id:23456, test:"\u3053"}\n', buf.read_len(23))
 
 
 class TweepyStreamBackoffTests(unittest.TestCase):

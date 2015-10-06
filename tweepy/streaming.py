@@ -150,7 +150,7 @@ class ReadBuffer(object):
 
     def __init__(self, stream, chunk_size):
         self._stream = stream
-        self._buffer = ''
+        self._buffer = six.b('')
         self._chunk_size = chunk_size
 
     def read_len(self, length):
@@ -160,7 +160,7 @@ class ReadBuffer(object):
             read_len = max(self._chunk_size, length - len(self._buffer))
             self._buffer += self._stream.read(read_len)
 
-    def read_line(self, sep='\n'):
+    def read_line(self, sep=six.b('\n')):
         start = 0
         while not self._stream.closed:
             loc = self._buffer.find(sep, start)
@@ -168,12 +168,12 @@ class ReadBuffer(object):
                 return self._pop(loc + len(sep))
             else:
                 start = len(self._buffer)
-            self._buffer += self._stream.read(self._chunk_size)
+                self._buffer += self._stream.read(self._chunk_size)
 
     def _pop(self, length):
         r = self._buffer[:length]
         self._buffer = self._buffer[length:]
-        return r
+        return r.decode('utf-8')
 
 
 class Stream(object):
