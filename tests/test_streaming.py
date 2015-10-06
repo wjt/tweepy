@@ -120,7 +120,7 @@ class TweepyStreamTests(unittest.TestCase):
         self.assertEqual(u'Caf\xe9'.encode('utf8'), s.session.params['follow'])
 
 
-class TweepyStreamReadBuffer(unittest.TestCase):
+class TweepyStreamReadBufferTests(unittest.TestCase):
 
     stream = """11\n{id:12345}\n\n24\n{id:23456, test:"blah"}\n"""
 
